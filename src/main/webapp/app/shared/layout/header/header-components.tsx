@@ -2,7 +2,7 @@ import React from 'react';
 import { NavItem, NavLink, NavbarBrand } from 'react-bootstrap';
 import { NavLink as Link } from 'react-router';
 
-import { faHome } from '@fortawesome/free-solid-svg-icons';
+import { faChartBar, faHome } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import logo from '/content/images/logo-jhipster.png';
@@ -26,6 +26,15 @@ export const Home = () => (
     <NavLink as={Link} to="/" className="d-flex align-items-center">
       <FontAwesomeIcon icon={faHome} />
       <span>Home</span>
+    </NavLink>
+  </NavItem>
+);
+
+export const ReportsMenu = () => (
+  <NavItem>
+    <NavLink as={Link} to="/reports" className="d-flex align-items-center">
+      <FontAwesomeIcon icon={faChartBar} />
+      <span className="ms-1">Reportes y Backup</span>
     </NavLink>
   </NavItem>
 );

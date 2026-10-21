@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -142,6 +143,7 @@ public class DiagnosticoResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of Diagnosticos in body.
      */
     @GetMapping("")
+    @Transactional(readOnly = true)
     public ResponseEntity<List<DiagnosticoDTO>> getAllDiagnosticos(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         LOG.debug("REST request to get a page of Diagnosticos");
         Page<DiagnosticoDTO> page = diagnosticoService.findAll(pageable);

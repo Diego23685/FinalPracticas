@@ -35,8 +35,7 @@ public class Diagnostico implements Serializable {
     @Column(name = "descripcion", nullable = false)
     private String descripcion;
 
-    @Lob
-    @Column(name = "receta_medica")
+    @jakarta.persistence.Column(name = "receta_medica", columnDefinition = "text")
     private String recetaMedica;
 
     @ManyToOne(fetch = FetchType.LAZY)

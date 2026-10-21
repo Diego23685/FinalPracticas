@@ -8,6 +8,7 @@ import Logout from 'app/modules/login/logout';
 import PrivateRoute from 'app/shared/auth/private-route';
 import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
 import { Authority } from 'app/shared/jhipster/constants';
+import ReportsAndBackup from 'app/modules/reports/ReportsAndBackup';
 
 const loading = <div>loading ...</div>;
 
@@ -36,6 +37,7 @@ const AppRoutes = () => {
               </PrivateRoute>
             }
           />
+          <Route path="reports" element={<ReportsAndBackup />} />
         </ErrorBoundaryRoutes>
       </Suspense>
     </div>
