@@ -1,0 +1,20 @@
+{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "oauth2",
+    "baseName": "medtechApp",
+    "buildTool": "maven",
+    "clientFramework": "react",
+    "creationTimestamp": 1703594185720,
+    "databaseType": "sql",
+    "devDatabaseType": "postgresql",
+    "enableTranslation": false,
+    "entities": ["Paciente", "Medico", "Cita", "Diagnostico", "Insumo"],
+    "jhipsterVersion": "9.4.0",
+    "lastLiquibaseTimestamp": 1703594485000,
+    "nativeLanguage": "en",
+    "packageName": "com.medtech.app",
+    "prodDatabaseType": "postgresql",
+    "testFrameworks": []
+  }
+}

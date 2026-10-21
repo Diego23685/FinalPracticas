@@ -1,0 +1,45 @@
+{
+  "annotations": {
+    "changelogDate": "20231226123925"
+  },
+  "applications": ["medtechApp"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "fechaHora",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "motivo",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "estado",
+      "fieldType": "EstadoCita",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "PENDIENTE,COMPLETADA,CANCELADA"
+    }
+  ],
+  "name": "Cita",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityField": "identificacion",
+      "otherEntityName": "paciente",
+      "relationshipName": "paciente",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "apellidos",
+      "otherEntityName": "medico",
+      "relationshipName": "medico",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

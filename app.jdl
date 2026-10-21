@@ -1,0 +1,66 @@
+application {
+  config {
+    baseName medtechApp
+    applicationType monolith
+    packageName com.medtech.app
+    authenticationType oauth2
+    databaseType sql
+    devDatabaseType postgresql
+    prodDatabaseType postgresql
+    buildTool maven
+    clientFramework react
+    enableTranslation false
+    testFrameworks []
+  }
+  entities *
+}
+
+entity Paciente {
+  nombres String required
+  apellidos String required
+  identificacion String required unique
+  fechaNacimiento LocalDate required
+  telefono String
+  tipoSangre String
+}
+
+entity Medico {
+  nombres String required
+  apellidos String required
+  especialidad String required
+  licenciaMedica String required unique
+  telefono String
+}
+
+entity Cita {
+  fechaHora Instant required
+  motivo String required
+  estado EstadoCita required
+}
+
+enum EstadoCita {
+  PENDIENTE, COMPLETADA, CANCELADA
+}
+
+entity Diagnostico {
+  fecha Instant required
+  descripcion String required
+  recetaMedica TextBlob
+}
+
+entity Insumo {
+  nombre String required
+  codigo String required unique
+  stock Integer required min(0)
+  precioUnitario BigDecimal required
+}
+
+relationship ManyToOne {
+  Cita{paciente(identificacion)} to Paciente
+  Cita{medico(apellidos)} to Medico
+  Diagnostico{cita} to Cita
+}
+
+dto * with mapstruct
+service * with serviceClass
+paginate Paciente, Medico, Cita, Diagnostico, Insumo with pagination

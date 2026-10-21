@@ -1,0 +1,35 @@
+{
+  "annotations": {
+    "changelogDate": "20231226124025"
+  },
+  "applications": ["medtechApp"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "fecha",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "descripcion",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "recetaMedica",
+      "fieldType": "TextBlob"
+    }
+  ],
+  "name": "Diagnostico",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "cita",
+      "relationshipName": "cita",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

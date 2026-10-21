@@ -1,0 +1,7 @@
+export enum EstadoCita {
+  PENDIENTE = 'PENDIENTE',
+
+  COMPLETADA = 'COMPLETADA',
+
+  CANCELADA = 'CANCELADA',
+}
