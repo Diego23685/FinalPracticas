@@ -1,371 +1,319 @@
-# medtechApp
+# 🏥 MedTech — Sistema de Gestión Clínica y Expedientes Médicos
 
-This application was generated using JHipster 9.4.0, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v9.4.0](https://www.jhipster.tech/documentation-archive/v9.4.0).
+Plataforma integral para la administración de consultas médicas, registro de pacientes, asignación de personal de salud, control de inventario farmacéutico, visualización de métricas analíticas y gestión de bases de datos relacionales.
 
-## Project Structure
+## 📋 Tabla de contenidos
 
-Node is required for generation and recommended for development. `package.json` is always generated for a better development experience with prettier, commit hooks, scripts and so on.
+- [Descripción del proyecto](#-descripción-del-proyecto)
+- [Tecnologías y arquitectura](#️-tecnologías-y-arquitectura)
+- [Requisitos previos](#-requisitos-previos)
+- [Instalación y ejecución local](#-instalación-y-ejecución-local)
+- [Credenciales de acceso](#-credenciales-de-acceso)
+- [Módulos del sistema](#-módulos-del-sistema)
+- [Consumo de API externa](#-consumo-de-api-externa)
+- [Respaldo y restauración de la base de datos](#-respaldo-y-restauración-de-la-base-de-datos)
+- [Detener la aplicación](#-detener-la-aplicación)
 
-In the project root, JHipster generates configuration files for tools like git, prettier, eslint, husky, and others that are well known and you can find references in the web.
+---
 
-`/src/*` structure follows default Java structure.
+## 📌 Descripción del proyecto
 
-- `.yo-rc.json` - Yeoman configuration file
-  JHipster configuration is stored in this file at `generator-jhipster` key. You may find `generator-jhipster-*` for specific blueprints configuration.
-- `.yo-resolve` (optional) - Yeoman conflict resolver
-  Allows to use a specific action when conflicts are found skipping prompts for files that matches a pattern. Each line should match `[pattern] [action]` with pattern been a [Minimatch](https://github.com/isaacs/minimatch#minimatch) pattern and action been one of skip (default if omitted) or force. Lines starting with `#` are considered comments and are ignored.
-- `.jhipster/*.json` - JHipster entity configuration files
+**MedTech** es una aplicación web diseñada para centralizar y optimizar la gestión de una clínica médica mediante una arquitectura cliente-servidor.
 
-- `npmw` - wrapper to use locally installed npm.
-  JHipster installs Node and npm locally using the build tool by default. This wrapper makes sure npm is installed locally and uses it avoiding some differences different versions can cause. By using `./npmw` instead of the traditional `npm` you can configure a Node-less environment to develop or test your application.
-- `/src/main/docker` - Docker configurations for the application and services that the application depends on
+El sistema permite administrar pacientes, médicos, citas médicas, diagnósticos, prescripciones e insumos farmacéuticos. Además, incorpora un panel de reportes analíticos, autenticación centralizada y herramientas para respaldar y restaurar la información almacenada.
 
-## Development
+### Objetivos principales
 
-### OAuth 2.0 / OpenID Connect
+- Centralizar la información clínica y administrativa.
+- Facilitar la gestión de pacientes y profesionales de la salud.
+- Organizar la programación y el seguimiento de citas médicas.
+- Gestionar diagnósticos y prescripciones médicas.
+- Controlar el inventario de insumos y detectar niveles críticos de existencias.
+- Visualizar indicadores mediante gráficos y reportes.
+- Implementar autenticación mediante Keycloak.
+- Mantener una estructura de base de datos versionada mediante Liquibase.
 
-Congratulations! You've selected an excellent way to secure your JHipster application. If you're not sure what OAuth and OpenID Connect (OIDC) are, please see [What the Heck is OAuth?](https://developer.okta.com/blog/2017/06/21/what-the-heck-is-oauth)
+## 🛠️ Tecnologías y arquitectura
 
-To log in to your app, you'll need to have [Keycloak](https://keycloak.org) up and running. The JHipster Team has created a Docker container for you that has the default users and roles. Start Keycloak using the following command.
+| Componente              | Tecnología                  | Descripción                                        |
+| ----------------------- | --------------------------- | -------------------------------------------------- |
+| Backend                 | Spring Boot                 | Desarrollo de la API y lógica de negocio.          |
+| Gestión de dependencias | Maven                       | Compilación y administración de dependencias Java. |
+| Persistencia            | Spring Data JPA e Hibernate | Acceso y mapeo objeto-relacional.                  |
+| Documentación de API    | Swagger / OpenAPI           | Documentación de los endpoints.                    |
+| Frontend                | React                       | Interfaz de usuario.                               |
+| Herramientas frontend   | Vite                        | Entorno de desarrollo y construcción.              |
+| Estilos                 | Bootstrap                   | Diseño y componentes de interfaz.                  |
+| Autenticación           | Keycloak                    | Gestión centralizada de usuarios y sesiones.       |
+| Protocolos de seguridad | OAuth 2.0 / OpenID Connect  | Autorización e inicio de sesión.                   |
+| Base de datos           | PostgreSQL                  | Almacenamiento de información relacional.          |
+| Migraciones             | Liquibase                   | Versionado y control de cambios de esquema.        |
+| Integración externa     | Spring RestTemplate         | Consumo de servicios REST externos.                |
+| Infraestructura         | Docker / Docker Compose     | Ejecución de servicios en contenedores.            |
 
-```bash
-docker compose -f src/main/docker/keycloak.yml up
-```
+## 📋 Requisitos previos
 
-The security settings in `src/main/resources/config/application.yml` are configured for this image.
+Antes de ejecutar el proyecto, asegúrate de tener instaladas las siguientes herramientas:
 
-```yaml
-spring:
-  ...
-  security:
-    oauth2:
-      client:
-        provider:
-          oidc:
-            issuer-uri: http://localhost:9080/realms/jhipster
-        registration:
-          oidc:
-            client-id: web_app
-            client-secret: web_app
-            scope: openid,profile,email
-```
+1. **Docker Desktop**, con Docker Compose habilitado.
+2. **Java Development Kit (JDK) 21**. Se recomienda [Eclipse Temurin JDK 21 LTS](https://adoptium.net/temurin/releases/?version=21).
+3. **Node.js**, versión 20 LTS o 22 LTS.
+4. **Git**, para clonar y administrar el repositorio.
 
-Some of Keycloak configuration is now done in build time and the other part before running the app, here is the [list](https://www.keycloak.org/server/all-config) of all build and configuration options.
-
-Before moving to production, please make sure to follow this [guide](https://www.keycloak.org/server/configuration) for better security and performance.
-
-Also, you should never use `start-dev` nor `KC_DB=dev-file` in production.
-
-When using Kubernetes, importing should be done using init-containers (with a volume when using `db=dev-file`).
-
-### Okta
-
-If you'd like to use Okta instead of Keycloak, it's pretty quick.
-
-First, you'll need to create a free developer account at <https://developer.okta.com/signup/>. After doing so, you'll get your own Okta domain, that has a name like `https://dev-123456.okta.com`.
-
-Modify `src/main/resources/config/application.yml` to use your Okta settings.
-
-```yaml
-spring:
-  ...
-  security:
-    oauth2:
-      client:
-        provider:
-          oidc:
-            issuer-uri: https://{yourOktaDomain}/oauth2/default
-        registration:
-          oidc:
-            client-id: {clientId}
-            client-secret: {clientSecret}
-security:
-```
-
-Create an OIDC App in Okta to get a `{clientId}` and `{clientSecret}`. To do this, log in to your Okta Developer account and navigate to **Applications** > **Add Application**. Click **Web** and click the **Next** button. Give the app a name you’ll remember, specify `http://localhost:8080` as a Base URI, and `http://localhost:8080/login/oauth2/code/oidc` as a Login Redirect URI. Click **Done**, then Edit and add `http://localhost:8080` as a Logout redirect URI. Copy and paste the client ID and secret into your `application.yml` file.
-
-Create a `ROLE_ADMIN` and `ROLE_USER` group and add users into them. Modify e2e tests to use this account when running integration tests.
-You'll need to change credentials in `src/test/javascript/e2e/account/account.spec.ts` and `src/test/javascript/e2e/admin/administration.spec.ts`.
-
-Navigate to **API** > **Authorization Servers**, click the **Authorization Servers** tab and edit the default one. Click the **Claims** tab and **Add Claim**. Name it "groups", and include it in the ID Token. Set the value type to "Groups" and set the filter to be a Regex of `.*`.
-
-After making these changes, you should be good to go! If you have any issues, please post them to [Stack Overflow](https://stackoverflow.com/questions/tagged/jhipster). Make sure to tag your question with "jhipster" and "okta".
-
-### Auth0
-
-If you'd like to use [Auth0](https://auth0.com/) instead of Keycloak, follow the configuration steps below:
-
-- Create a free developer account at [Sign Up - Auth0](https://auth0.com/signup). After successful sign-up, your account will be associated with a unique domain like `dev-xxx.us.auth0.com`
-- Create a new application of type `Regular Web Applications`. Switch to the `Settings` tab, and configure your application settings like:
-  - Allowed Callback URLs: `http://localhost:8080/login/oauth2/code/oidc`
-  - Allowed Logout URLs: `http://localhost:8080/`
-- Navigate to **User Management** > **Roles** and create new roles named `ROLE_ADMIN`, and `ROLE_USER`.
-- Navigate to **User Management** > **Users** and create a new user account. Click on the **Role** tab to assign roles to the newly created user account.
-- Navigate to **Auth Pipeline** > **Rules** and create a new Rule. Choose `Empty rule` template. Provide a meaningful name like `JHipster claims` and replace `Script` content with the following and Save.
-
-```javascript
-function (user, context, callback) {
-  user.preferred_username = user.email;
-  const roles = (context.authorization || {}).roles;
-
-  function prepareCustomClaimKey(claim) {
-    return `https://www.jhipster.tech/${claim}`;
-  }
-
-  const rolesClaim = prepareCustomClaimKey('roles');
-
-  if (context.idToken) {
-    context.idToken[rolesClaim] = roles;
-  }
-
-  if (context.accessToken) {
-    context.accessToken[rolesClaim] = roles;
-  }
-
-  callback(null, user, context);
-}
-```
-
-- In your `JHipster` application, modify `src/main/resources/config/application.yml` to use your Auth0 application settings:
-
-```yaml
-spring:
-  ...
-  security:
-    oauth2:
-      client:
-        provider:
-          oidc:
-            # make sure to include the ending slash!
-            issuer-uri: https://{your-auth0-domain}/
-        registration:
-          oidc:
-            client-id: {clientId}
-            client-secret: {clientSecret}
-            scope: openid,profile,email
-jhipster:
-  ...
-  security:
-    oauth2:
-      audience:
-        - https://{your-auth0-domain}/api/v2/
-```
-
-The build system will install automatically the recommended version of Node and npm.
-
-We provide a wrapper to launch npm.
-You will only need to run this command when dependencies change in [package.json](package.json).
+Verifica las instalaciones desde una terminal:
 
 ```bash
-./npmw install
+java -version
+node -v
+npm -v
+git --version
+docker --version
+docker compose version
 ```
 
-We use npm scripts and Vite as our build system.
+## 🚀 Instalación y ejecución local
 
-Run the following commands in two separate terminals to create a blissful development experience where your browser
-auto-refreshes when files change on your hard drive.
+### 1. Clonar el repositorio
+
+Reemplaza `TU_USUARIO` por el nombre de usuario u organización propietaria del repositorio.
 
 ```bash
-./npmw run backend:start
-./npmw run start
+git clone https://github.com/TU_USUARIO/medtech-app.git
+cd medtech-app
 ```
 
-Npm is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
-specifying a newer version in [package.json](package.json). You can also run `./npmw update` and `./npmw install` to manage dependencies.
-Add the `help` flag on any command to see how you can use it. For example, `./npmw help update`.
+### 2. Instalar las dependencias del frontend
 
-The `./npmw run` command will list all the scripts available to run for this project.
-
-### PWA Support
-
-JHipster ships with PWA (Progressive Web App) support, and it's turned off by default. One of the main components of a PWA is a service worker.
-
-The service worker initialization code is commented out by default. To enable it, uncomment the following code in `src/main/webapp/index.html`:
-
-```html
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./service-worker.js').then(function () {
-      console.log('Service Worker Registered');
-    });
-  }
-</script>
-```
-
-Note: [Workbox](https://developer.chrome.com/docs/workbox) powers JHipster's service worker. It dynamically generates the `service-worker.js` file.
-
-### Managing dependencies
-
-For example, to add [Leaflet](https://leafletjs.com/) library as a runtime dependency of your application, you would run the following command:
+Desde la raíz del proyecto, ejecuta:
 
 ```bash
-./npmw install --save --save-exact leaflet
+npm install
 ```
 
-To benefit from TypeScript type definitions from [DefinitelyTyped](https://definitelytyped.org/) repository in development, you would run the following command:
+Este comando instala las dependencias definidas en `package.json`.
+
+### 3. Levantar la infraestructura con Docker
+
+Inicia PostgreSQL y Keycloak en segundo plano:
 
 ```bash
-./npmw install --save-dev --save-exact @types/leaflet
+docker compose -f src/main/docker/postgresql.yml up -d
+docker compose -f src/main/docker/keycloak.yml up -d
 ```
 
-Then you would import the JS and CSS files specified in library's installation instructions so that [Vite][] knows about them:
-Note: There are still a few other things remaining to do for Leaflet that we won't detail here.
-
-For further instructions on how to develop with JHipster, have a look at [Using JHipster in development](https://www.jhipster.tech/development/).
-
-## Building for production
-
-### Packaging as jar
-
-To build the final jar and optimize the medtechApp application for production, run:
+Comprueba que los contenedores estén en ejecución:
 
 ```bash
-./mvnw -Pprod clean verify
+docker ps
 ```
 
-This will concatenate and minify the client CSS and JavaScript files. It will also modify `index.html` so it references these new files.
-To ensure everything worked, run:
+**Importante:** espera a que PostgreSQL esté listo antes de iniciar el backend. Keycloak también necesita tiempo para completar su inicialización y, si corresponde, importar la configuración del realm `jhipster`.
+
+Puedes consultar los registros de cada servicio con:
 
 ```bash
-java -jar target/*.jar
+docker compose -f src/main/docker/postgresql.yml logs -f
 ```
-
-Then navigate to [http://localhost:8080](http://localhost:8080) in your browser.
-
-Refer to [Using JHipster in production][] for more details.
-
-### Packaging as war
-
-To package your application as a war in order to deploy it to an application server, run:
 
 ```bash
-./mvnw -Pprod,war clean verify
+docker compose -f src/main/docker/keycloak.yml logs -f
 ```
 
-### JHipster Control Center
+Presiona `Ctrl + C` para salir de la visualización de registros sin detener los contenedores.
 
-JHipster Control Center can help you manage and control your application(s). You can start a local control center server (accessible on http://localhost:7419) with:
+### 4. Iniciar el backend (Spring Boot)
+
+Abre una terminal en la raíz del proyecto.
+
+**Windows — CMD:**
+
+```bat
+mvnw.cmd
+```
+
+**Windows — PowerShell:**
+
+```powershell
+.\mvnw.cmd
+```
+
+**Linux / macOS:**
 
 ```bash
-docker compose -f src/main/docker/jhipster-control-center.yml up
+chmod +x mvnw
+./mvnw
 ```
 
-## Testing
+El comando ejecuta la compilación y el inicio de la aplicación mediante Maven Wrapper.
 
-### Spring Boot tests
+Cuando el backend haya iniciado correctamente, estará disponible en:
 
-To launch your application's tests, run:
+- **Backend:** http://localhost:8080/
+
+> Si el proyecto requiere perfiles específicos de Spring o variables de entorno, configura los valores correspondientes antes de iniciarlo.
+
+### 5. Iniciar el frontend (React)
+
+Abre una segunda terminal en la raíz del proyecto y ejecuta:
 
 ```bash
-./mvnw verify
+npm start
 ```
 
-### Client tests
+Si la configuración del proyecto está preparada para iniciar el servidor de desarrollo en el puerto 9000, podrás acceder a la aplicación desde:
 
-Unit tests are run by Vitest. They're located near components and can be run with:
+- **Frontend:** http://localhost:9000/
+
+> Si `npm start` no está definido en `package.json`, verifica los scripts disponibles con `npm run`. El comando y el puerto deben coincidir con la configuración real del frontend.
+
+## 🔐 Credenciales de acceso
+
+Al seleccionar **Iniciar sesión / Sign in**, la aplicación redirige al usuario al servicio de autenticación de Keycloak.
+
+Las siguientes credenciales son las predeterminadas del entorno de desarrollo descrito:
+
+| Rol              | Usuario | Contraseña |
+| ---------------- | ------- | ---------- |
+| Administrador    | `admin` | `admin`    |
+| Usuario estándar | `user`  | `user`     |
+
+**Advertencia de seguridad:** estas credenciales son únicamente para pruebas locales, siempre que coincidan con la configuración importada de Keycloak. No deben utilizarse en producción. Cambia las contraseñas predeterminadas y evita publicar credenciales reales en el repositorio.
+
+## 📦 Módulos del sistema
+
+### 1. Gestión de entidades (CRUD)
+
+Los formularios de administración están disponibles desde el menú superior **Entities** y, según la configuración de la interfaz, mediante los accesos directos del dashboard.
+
+#### 👥 Pacientes
+
+Permite registrar y administrar la información de los pacientes:
+
+- Datos personales.
+- Identificación única.
+- Fecha de nacimiento.
+- Tipo de sangre.
+
+#### 🩺 Médicos
+
+Permite gestionar la información del personal médico:
+
+- Datos del profesional.
+- Licencias profesionales.
+- Especialidades médicas.
+
+#### 📅 Citas médicas
+
+Permite programar y administrar citas vinculando a los pacientes con los médicos correspondientes.
+
+Estados contemplados:
+
+- `PENDIENTE`
+- `COMPLETADA`
+- `CANCELADA`
+
+#### 📝 Diagnósticos y prescripciones
+
+Permite registrar diagnósticos derivados de las consultas y asociar recetas médicas con las citas correspondientes.
+
+#### 💊 Insumos y farmacia
+
+Permite administrar el inventario de insumos clínicos y farmacéuticos mediante:
+
+- Registro de productos e insumos.
+- Control de precios unitarios.
+- Seguimiento de existencias.
+- Identificación de niveles críticos de inventario.
+
+### 2. Reportes analíticos (`/reports`)
+
+El módulo de reportes proporciona información resumida para facilitar el seguimiento de la actividad clínica y administrativa.
+
+| Reporte                         | Descripción                                                                                                               |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Citas por médico                | Gráfico de las citas atendidas por cada médico.                                                                           |
+| Distribución por tipo de sangre | Gráfico de la cantidad de pacientes según su tipo de sangre.                                                              |
+| Citas por estado                | Resumen cuantitativo de citas completadas y pendientes, con posibilidad de mostrar otros estados según la implementación. |
+| Inventario crítico              | Identificación de insumos con existencias iguales o inferiores a 10 unidades.                                             |
+| Historial de diagnósticos       | Listado histórico de los últimos diagnósticos y prescripciones registrados.                                               |
+
+**Umbral de inventario crítico:** se consideran críticos los insumos con un stock menor o igual a 10 unidades.
+
+### 3. Consumo de API externa
+
+El backend integra un servicio externo de tipos de cambio mediante `RestTemplate`.
+
+**Servicio utilizado:** [Open Exchange Rates API — open.er-api.com](https://open.er-api.com/)
+
+La información de tipos de cambio se presenta en la cabecera del panel de reportes para proporcionar una referencia actualizada de las cotizaciones disponibles.
+
+La consulta depende de la disponibilidad del servicio externo y de la conectividad a Internet.
+
+### 4. Respaldo y restauración de la base de datos
+
+El proyecto contempla procedimientos para crear copias de seguridad de PostgreSQL y recuperar información previamente respaldada.
+
+#### Generar un respaldo
+
+El siguiente ejemplo utiliza `pg_dump` desde el contenedor de PostgreSQL. Sustituye `NOMBRE_CONTENEDOR`, `USUARIO_BD` y `NOMBRE_BD` por los valores reales de tu configuración.
 
 ```bash
-./npmw test
+docker exec NOMBRE_CONTENEDOR pg_dump \
+  -U USUARIO_BD \
+  -d NOMBRE_BD \
+  > backup.sql
 ```
 
-## Others
+El archivo `backup.sql` se genera en el directorio de la máquina anfitriona desde el que se ejecuta el comando.
 
-### Code quality using Sonar
+#### Restaurar un respaldo
 
-Sonar is used to analyse code quality. You can start a local Sonar server (accessible on http://localhost:9001) with:
+Para restaurar un archivo SQL compatible con `psql`:
 
 ```bash
-docker compose -f src/main/docker/sonar.yml up -d
+docker exec -i NOMBRE_CONTENEDOR psql \
+  -U USUARIO_BD \
+  -d NOMBRE_BD \
+  < backup.sql
 ```
 
-Note: we have turned off forced authentication redirect for UI in [src/main/docker/sonar.yml](src/main/docker/sonar.yml) for out of the box experience while trying out SonarQube, for real use cases turn it back on.
+**Precauciones:**
 
-You can run a Sonar analysis with using the [sonar-scanner](https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner) or by using the maven plugin.
+- Verifica el nombre de la base de datos y del contenedor antes de ejecutar los comandos.
+- Comprueba que el archivo de respaldo sea válido y corresponda a la base de datos esperada.
+- Realiza un respaldo antes de restaurar datos.
+- Una restauración puede crear conflictos con objetos existentes o modificar información. Utiliza una base de datos de prueba cuando corresponda.
+- Mantén las copias de seguridad en un lugar seguro y fuera del repositorio público.
 
-Then, run a Sonar analysis:
+## 🛑 Detener la aplicación
+
+### 1. Detener el backend y el frontend
+
+En las terminales donde se están ejecutando Spring Boot y React, presiona:
+
+```text
+Ctrl + C
+```
+
+### 2. Detener los contenedores de PostgreSQL y Keycloak
+
+Desde la raíz del proyecto, ejecuta:
 
 ```bash
-./mvnw -Pprod clean verify sonar:sonar -Dsonar.login=admin -Dsonar.password=admin
+docker compose -f src/main/docker/postgresql.yml down
+docker compose -f src/main/docker/keycloak.yml down
 ```
 
-If you need to re-run the Sonar phase, please be sure to specify at least the `initialize` phase since Sonar properties are loaded from the sonar-project.properties file.
+Este procedimiento detiene y elimina los contenedores administrados por esos archivos Compose, pero normalmente conserva los datos almacenados en volúmenes persistentes.
 
-```bash
-./mvnw initialize sonar:sonar -Dsonar.login=admin -Dsonar.password=admin
-```
+**No utilices `docker compose down -v`** si deseas conservar los datos de la base de datos, ya que la opción `-v` puede eliminar los volúmenes asociados.
 
-Additionally, Instead of passing `sonar.password` and `sonar.login` as CLI arguments, these parameters can be configured from [sonar-project.properties](sonar-project.properties) as shown below:
+## 📄 Licencia
 
-```bash
-sonar.login=admin
-sonar.password=admin
-```
+La licencia del proyecto debe definirse según las condiciones de distribución y uso establecidas por sus autores. Si deseas publicarlo como software de código abierto, añade un archivo `LICENSE` en la raíz del repositorio.
 
-For more information, refer to the [Code quality page][].
+---
 
-### Docker Compose support
+**MedTech** — Sistema de Gestión Clínica y Expedientes Médicos.
 
-JHipster generates a number of Docker Compose configuration files in the [src/main/docker/](src/main/docker/) folder to launch required third party services.
-
-For example, to start required services in Docker containers, run:
-
-```bash
-docker compose -f src/main/docker/services.yml up -d
-```
-
-To stop and remove the containers, run:
-
-```bash
-docker compose -f src/main/docker/services.yml down
-```
-
-[Spring Docker Compose Integration](https://docs.spring.io/spring-boot/reference/features/dev-services.html) is enabled by default. It's possible to disable it in `application.yml`:
-
-```yaml
-spring:
-  ...
-  docker:
-    compose:
-      enabled: false
-```
-
-You can also fully dockerize your application and all the services that it depends on.
-To achieve this, first build a Docker image of your app by running:
-
-```bash
-npm run java:docker
-```
-
-Or build an arm64 Docker image when using an arm64 processor OS, i.e., Apple Silicon chips (M*), running:
-
-```bash
-npm run java:docker:arm64
-```
-
-Then run:
-
-```bash
-docker compose -f src/main/docker/app.yml up -d
-```
-
-For more information refer to [Docker and Docker-Compose](https://www.jhipster.tech/documentation-archive/v9.4.0/docker-compose/), this page also contains information on the Docker Compose sub-generator (`jhipster docker-compose`), which is able to generate Docker configurations for one or several JHipster applications.
-
-## Continuous Integration (optional)
-
-To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration](https://www.jhipster.tech/documentation-archive/v9.4.0/setting-up-ci/) page for more information.
-
-## References
-
-- [JHipster Homepage and latest documentation](https://www.jhipster.tech/)
-- [JHipster 9.4.0 archive](https://www.jhipster.tech/documentation-archive/v9.4.0)
-- [Using JHipster in development](https://www.jhipster.tech/documentation-archive/v9.4.0/development/)
-- [Using Docker and Docker-Compose](https://www.jhipster.tech/documentation-archive/v9.4.0/docker-compose)
-- [Using JHipster in production](https://www.jhipster.tech/documentation-archive/v9.4.0/production/)
-- [Running tests page](https://www.jhipster.tech/documentation-archive/v9.4.0/running-tests/)
-- [Code quality page](https://www.jhipster.tech/documentation-archive/v9.4.0/code-quality/)
-- [Setting up Continuous Integration](https://www.jhipster.tech/documentation-archive/v9.4.0/setting-up-ci/)
-- [Node.js](https://nodejs.org/)
-- [NPM](https://www.npmjs.com/)
-- [Jest](https://jestjs.io)
-- [Leaflet](https://leafletjs.com/)
-- [DefinitelyTyped](https://definitelytyped.org/)
+_Proyecto de desarrollo de software orientado a la gestión clínica, la administración de información médica y el análisis de datos._
